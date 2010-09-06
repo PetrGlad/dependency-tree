@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+
+   <extension
+         point="org.eclipse.ui.popupMenus">
+      <objectContribution
+            adaptable="true"
+            id="ShowDependencies.contribution1"
+            objectClass="org.eclipse.core.resources.IProject">
+         <menu
+               id="ShowDependencies.menu1"
+               label="Dependencies"
+               path="additions">
+            <separator
+                  name="group1">
+            </separator>
+         </menu>
+         <action
+               class="showdependencies.popup.actions.ShowDependenciesAction"
+               enablesFor="1"
+               id="ShowDependencies.ShowDependenciesAction"
+               label="Show Dependencies"
+               menubarPath="ShowDependencies.menu1/group1">
+         </action>
+      </objectContribution>
+   </extension>
+
+</plugin>
