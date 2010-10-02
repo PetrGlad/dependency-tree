@@ -16,8 +16,8 @@ This plug-in is currently distributed in source form only. To use it you need Ec
 2. Export/Plug-in development/Deployable plug-ins and fragments
 3. Choose the plug-in project
 4. Here are two options put files manually into your installation directory or install into workspace's metadata.
-4.1 To install into workspace choose "install into host" and keep suggested filepath (somewhere in workspace/.metadata/) the rest will be done for you.
-4.2 To install into host choose to export to directory, specify some directory name. Then put file petrglad.dependencytree_1.0.2.alpha.jar into your eclipse installation directory/dropins/dependency-tree/eclipse/plugins
+    1. To install into workspace choose "install into host" and keep suggested filepath (somewhere in workspace/.metadata/) the rest will be done for you.
+    2. To install into host choose to export to directory, specify some directory name. Then put file petrglad.dependencytree_1.0.2.alpha.jar into your eclipse installation directory/dropins/dependency-tree/eclipse/plugins
 5. Restart eclipse
 
 ### Quick&Dirty way to run it immediately without installing
