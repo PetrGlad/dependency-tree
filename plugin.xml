@@ -17,7 +17,7 @@
             </separator>
          </menu>
          <action
-               class="showdependencies.popup.actions.ShowDependenciesAction"
+               class="petrglad.dependencytree.popup.actions.ShowDependenciesAction"
                enablesFor="1"
                id="ShowDependencies.ShowDependenciesAction"
                label="Show Dependencies"

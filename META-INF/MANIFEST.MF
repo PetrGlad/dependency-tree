@@ -1,13 +1,13 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: dependency tree
+Bundle-Name: Dependency tree
 Bundle-SymbolicName: petrglad.dependencytree;singleton:=true
-Bundle-Version: 1.0.2.alpha
-Bundle-Activator: showdependencies.Activator
+Bundle-Version: 1.0.3.alpha
+Bundle-Activator: petrglad.dependencytree.Activator
 Bundle-Vendor: Petr Gladkikh
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.core.resources,
  org.eclipse.jdt.core;bundle-version="3.5.2"
-Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy

@@ -1,4 +1,4 @@
-package showdependencies;
+package petrglad.dependencytree;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
@@ -9,19 +9,12 @@ import org.osgi.framework.BundleContext;
  */
 public class Activator extends AbstractUIPlugin {
 
-    /**
-     * The plug-in ID (should match one from plugin's manifest)
-     */
+    // The plug-in ID
     public static final String PLUGIN_ID = "petrglad.dependencytree";
 
-    /**
-     * The plugin's shared instance
-     */
+    // The shared instance
     private static Activator plugin;
 
-    /**
-     * The constructor
-     */
     public Activator() {
     }
 
@@ -38,21 +31,17 @@ public class Activator extends AbstractUIPlugin {
     }
 
     /**
-     * Returns the shared instance
-     * 
-     * @return the shared instance
+     * @return The shared instance of the plugin.
      */
     public static Activator getDefault() {
 	return plugin;
     }
 
     /**
-     * Returns an image descriptor for the image file at the given plug-in
-     * relative path
-     * 
      * @param path
-     *            the path
-     * @return the image descriptor
+     *            The path
+     * @return Image descriptor for the image file at the given plug-in relative
+     *         path
      */
     public static ImageDescriptor getImageDescriptor(String path) {
 	return imageDescriptorFromPlugin(PLUGIN_ID, path);
