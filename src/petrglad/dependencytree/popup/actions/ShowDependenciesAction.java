@@ -21,7 +21,6 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IPackageFragmentRoot;
-import org.eclipse.jdt.internal.core.JavaProject;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
@@ -34,7 +33,51 @@ import org.eclipse.ui.IWorkbenchPart;
 
 public class ShowDependenciesAction implements IObjectActionDelegate {
 
+    private final class ScanJob extends Job {
+	private final IFile outFile;
+	private boolean canRun[] = { true };
+
+	private ScanJob(String name, IFile outFile) {
+	    super(name);
+	    this.outFile = outFile;
+	}
+
+	@Override
+	protected void canceling() {
+	    canRun[0] = false;
+	    super.canceling();
+	}
+
+	@Override
+	protected IStatus run(IProgressMonitor monitor) {
+	    // outFile.set getLocation().toFile()
+	    final ByteArrayOutputStream out = new ByteArrayOutputStream();
+	    final PrintWriter output = new PrintWriter(out);
+	    try {
+		List<IProject> met = new LinkedList<IProject>();
+		Set<IProject> all = new HashSet<IProject>();
+		met.add(target);
+		output.println(target.getFullPath());
+		listDeps(canRun, 1, target, all, met, output);
+		output.flush();
+		outFile.create(new ByteArrayInputStream(out.toByteArray()),
+			true, monitor);
+		showBox("Dependenices list was written to "
+			+ outFile.getFullPath());
+		return new Status(IStatus.OK, "showDeps",
+			"Completed scanning dependencies list");
+	    } catch (CoreException e) {
+		return new Status(IStatus.ERROR, "showDeps",
+			"Can not write dependencies list to file "
+				+ outFile.getFullPath(), e);
+	    } finally {
+		output.close(); // Just in case (no disk I/O)
+	    }
+	}
+    }
+
     /**
+     * 
      * @param all
      *            List of all projects gathered so far - used to not show
      *            duplicates.
@@ -44,7 +87,11 @@ public class ShowDependenciesAction implements IObjectActionDelegate {
     static void listDeps(boolean[] canRun, final int indent,
 	    final IProject project, final Set<IProject> all,
 	    final List<IProject> met, PrintWriter output) throws CoreException {
-	final IJavaProject jp = new JavaProject(project, null);
+
+	@SuppressWarnings("restriction")
+	final IJavaProject jp = new org.eclipse.jdt.internal.core.JavaProject(
+		project, null);
+
 	jp.open(null);
 	IPackageFragmentRoot[] roots = jp.getAllPackageFragmentRoots();
 	for (IPackageFragmentRoot iPackageFragmentRoot : roots) {
@@ -118,43 +165,7 @@ public class ShowDependenciesAction implements IObjectActionDelegate {
 		    + new SimpleDateFormat("yyyy-MM-dd_HHMMSS")
 			    .format(new Date()) + ".txt");
 	    assert null != outFile;
-	    Job job = new Job("Dumping dependencies of " + target) {
-		private boolean canRun[] = { true };
-
-		@Override
-		protected void canceling() {
-		    canRun[0] = false;
-		    super.canceling();
-		}
-
-		@Override
-		protected IStatus run(IProgressMonitor monitor) {
-		    // outFile.set getLocation().toFile()
-		    final ByteArrayOutputStream out = new ByteArrayOutputStream();
-		    final PrintWriter output = new PrintWriter(out);
-		    try {
-			List<IProject> met = new LinkedList<IProject>();
-			Set<IProject> all = new HashSet<IProject>();
-			met.add(target);
-			output.println(target.getFullPath());
-			listDeps(canRun, 1, target, all, met, output);
-			output.flush();
-			outFile.create(
-				new ByteArrayInputStream(out.toByteArray()),
-				true, monitor);
-			showBox("Dependenices list was written to "
-				+ outFile.getFullPath());
-			return new Status(IStatus.OK, "showDeps",
-				"Completed scanning dependencies list");
-		    } catch (CoreException e) {
-			return new Status(IStatus.ERROR, "showDeps",
-				"Can not write dependencies list to file "
-					+ outFile.getFullPath(), e);
-		    } finally {
-			output.close(); // Just in case (no disk I/O)
-		    }
-		}
-	    };
+	    Job job = new ScanJob("Dumping dependencies of " + target, outFile);
 	    job.schedule();
 	}
     }
