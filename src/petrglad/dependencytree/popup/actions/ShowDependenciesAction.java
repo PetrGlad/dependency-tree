@@ -187,7 +187,7 @@ public class ShowDependenciesAction implements IObjectActionDelegate {
 		.getSite().getSelectionProvider().getSelection();
 	Object selected = selection.getFirstElement();
 	if (selected instanceof IProject) {
-	    target = (IProject) selection;
+	    target = (IProject) selected;
 	} else if (selected instanceof IAdaptable) {
 	    target = (IProject) ((IAdaptable) selected)
 		    .getAdapter(IProject.class);
